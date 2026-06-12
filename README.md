@@ -96,7 +96,7 @@ FFmpeg là công cụ dòng lệnh xử lý video và âm thanh (cắt ghép, tr
   3. Thêm thư mục `C:\ffmpeg\bin` vào biến môi trường **Environment Variables -> PATH** của Windows.
   4. Mở Command Prompt và kiểm tra lại bằng lệnh: `ffmpeg -version`.
 
-### 2. Cấu Hùi GPU NVIDIA CUDA & cuDNN (Khuyên dùng)
+### 2. Cấu Hình GPU NVIDIA CUDA & cuDNN (Khuyên dùng)
 Dành cho tính năng trích xuất phụ đề siêu tốc của `faster-whisper` trên GPU.
 1. **CUDA Toolkit**: 
    * Tải và cài đặt [CUDA Toolkit 11.8 hoặc 12.1](https://developer.nvidia.com/cuda-downloads) phù hợp với Driver của card đồ họa.
@@ -116,13 +116,54 @@ Dành cho tính năng trích xuất phụ đề siêu tốc của `faster-whispe
 ### 4. Cấu Hình Ủy Quyền Tài Khoản Đám Mây (Tùy Chọn)
 Để sử dụng tính năng tự động tải lên Google Drive & YouTube, hoặc gửi video báo cáo qua Telegram:
 * **Google API (Drive & YouTube)**:
-  1. Truy cập [Google Cloud Console](https://console.cloud.google.com/).
-  2. Tạo một dự án mới, kích hoạt API Google Drive và YouTube Data API v3.
-  3. Vào phần credentials tạo **OAuth Client ID** loại Desktop Application, tải file JSON về và đổi tên thành `client_secrets.json` đặt tại thư mục gốc của dự án `AEGIS-AI/`.
+  * Xem hướng dẫn cấu hình chi tiết đăng YouTube tự động ở phần tiếp theo dưới đây.
 * **Telegram Bot**:
   1. Nhắn tin cho `@BotFather` trên Telegram để tạo một Bot mới và lấy **API Token**.
   2. Lấy **User Chat ID** của tài khoản bạn (thông qua `@userinfobot`).
   3. Điền các cấu hình này vào tệp `.env` ở bước dưới.
+
+---
+
+## 📺 Hướng Dẫn Cấu Hình Đăng Video Lên YouTube Tự Động
+
+Aegis AI hỗ trợ tính năng xuất bản video tự động 100% lên YouTube qua API chính thống. Để thiết lập, vui lòng làm theo các bước sau:
+
+### Bước 1: Tạo Dự Án trên Google Cloud Console
+1. Truy cập vào [Google Cloud Console](https://console.cloud.google.com/) và đăng nhập bằng tài khoản Google của bạn.
+2. Nhấn vào nút tạo dự án mới (**Create Project**) ở thanh trên cùng và đặt tên (ví dụ: `Aegis AI Publisher`).
+
+### Bước 2: Kích hoạt YouTube Data API v3
+1. Ở ô tìm kiếm của Google Cloud, gõ **"YouTube Data API v3"** và chọn kết quả tương ứng.
+2. Nhấn nút **Enable** để kích hoạt API này cho dự án.
+
+### Bước 3: Cấu hình Màn hình Đồng ý OAuth (OAuth Consent Screen)
+*Trước khi tạo thông tin xác thực, bạn phải định nghĩa màn hình xin quyền đăng nhập:*
+1. Vào mục **APIs & Services** -> **OAuth Consent Screen** từ menu bên trái.
+2. Chọn **User Type** là **External** và nhấn **Create**.
+3. Điền đầy đủ thông tin bắt buộc:
+   * **App name**: ví dụ `Aegis Publisher`.
+   * **User support email**: Email của bạn.
+   * **Developer contact information**: Email của bạn.
+4. Ở trang tiếp theo (**Scopes**), nhấn **Add or Remove Scopes**, thêm scope thủ công:
+   * `https://www.googleapis.com/auth/youtube.upload` (Quyền đăng tải video).
+5. Ở trang **Test Users**, nhấn **Add Users** và điền chính xác địa chỉ email Google/YouTube mà bạn muốn đăng video lên đó (Do app đang ở chế độ Testing, Google yêu cầu khai báo email test để cho phép đăng nhập).
+
+### Bước 4: Tạo Client ID & Tải file cấu hình
+1. Di chuyển sang mục **Credentials** ở menu bên trái.
+2. Nhấn **+ Create Credentials** ở trên cùng -> Chọn **OAuth client ID**.
+3. Tại ô **Application type**, chọn **Desktop app** (Ứng dụng máy tính).
+4. Đặt tên (ví dụ: `Aegis Desktop Client`) và nhấn **Create**.
+5. Giao diện sẽ hiển thị thông báo thành công. Tìm client ID vừa tạo ở danh sách bên dưới, nhấn nút **Download JSON** (icon mũi tên tải xuống ở góc phải dòng) để tải tệp cấu hình về máy.
+6. Đổi tên tệp tin tải về thành `client_secrets.json` và lưu trực tiếp vào thư mục gốc của dự án (`AEGIS-AI/client_secrets.json`).
+
+### Bước 5: Xác thực tài khoản lần đầu (Một lần duy nhất)
+1. Khi chạy quy trình tự động hóa có bật tính năng **Đăng tải YouTube 🎥** lần đầu tiên, hệ thống sẽ tự động phát hiện tệp `client_secrets.json` và hiển thị thông điệp xác thực trong console:
+   ```
+   🔑 Đang khởi tạo luồng xác thực OAuth2 mới. Vui lòng phê duyệt trên cửa sổ trình duyệt...
+   ```
+2. Một cửa sổ trình duyệt Web sẽ tự động mở ra. Bạn chỉ cần chọn tài khoản Google/YouTube của mình, nhấn **Tiếp tục (Continue)** khi thấy cảnh báo ứng dụng chưa xác minh (do app tự tạo cá nhân) và chấp thuận cấp quyền upload.
+3. Sau khi xác thực thành công, hệ thống sẽ tự động lưu trữ khóa truy cập vĩnh viễn vào tệp `youtube_token.pickle` trong thư mục gốc. 
+4. Từ các lần chạy sau, Aegis AI sẽ tự động hoạt động 100% ngầm không cần mở lại trình duyệt nhờ cơ chế tự làm mới Token (Refresh Token).
 
 ---
 
