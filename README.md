@@ -1,35 +1,36 @@
-# Hệ Thống Nhân Viên AI Tự Động (Aegis AI Employee System)
+# ✦ AEGIS AI EMPLOYEE SYSTEM ✦
+### Trung Tâm Điều Hành Tác Nhân Tự Động Hóa & Đa Phương Tiện (Advanced AI Employee Workflow Center)
 
-Hệ thống **Aegis AI Employee** là một tác nhân AI (AI Agent) tự động hóa toàn trình, có khả năng tự nhận thức mục tiêu lớn, lập kế hoạch công việc chi tiết, thực thi đa phương tiện (tải video, tạo và dịch phụ đề, lướt web), và tự rút bài học kinh nghiệm sau mỗi lần vận hành.
+Hệ thống **Aegis AI Employee** là một tác nhân AI (AI Agent) tự động hóa toàn trình, tích hợp sơ đồ node-graph trực quan giúp người dùng dễ dàng kết nối, kéo thả và tùy biến các khối chức năng để điều khiển toàn bộ pipeline xử lý đa phương tiện. Hệ thống có khả năng tự nhận thức mục tiêu, lập kế hoạch chi tiết, tương tác trực tuyến qua trình duyệt tự động, và tự rút bài học kinh nghiệm sau mỗi chu trình vận hành.
 
-Dự án này được tối ưu hóa đặc biệt để tận dụng tối đa sức mạnh xử lý của card đồ họa **NVIDIA RTX Quadro 6000 (24GB VRAM)** để chạy cục bộ các mô hình ngôn ngữ lớn (DeepSeek-R1 qua Ollama) và trích xuất giọng nói tốc độ cao (`faster-whisper` chạy trên CUDA).
-
----
-
-## 🚀 Các Tính Năng Vượt Trội
-
-1. **Bộ não Trung tâm DeepSeek-R1**: Hỗ trợ chạy local siêu tốc qua Ollama hoặc kết nối qua DeepSeek Cloud API.
-2. **Hiển thị Luồng suy nghĩ (Thinking Chain)**: Tách riêng phần lập luận `<think>` của DeepSeek hiển thị thời gian thực lên Dashboard giúp người dùng quan sát được "luồng suy nghĩ" sâu của AI.
-3. **Trình Tải Video Cao Cấp**: Tích hợp `yt-dlp` cho phép tải video từ YouTube, TikTok, Facebook kèm báo cáo tiến trình (tốc độ, dung lượng, % hoàn thành) thời gian thực.
-4. **Subtitle Engine Siêu Tốc (GPU Powered)**:
-   - Sử dụng mô hình `faster-whisper` (chạy trên GPU CUDA dạng `float16` trên 24GB VRAM) nhanh gấp 4 lần phiên bản gốc.
-   - Biên dịch phụ đề ngữ cảnh chuyên nghiệp bằng DeepSeek.
-   - Tự động khắc phục lỗi ký tự đường dẫn đặc biệt của Windows bằng giải thuật chuyển thư mục làm việc tương đối trong FFmpeg để nhúng phụ đề vào video gốc.
-5. **Browser Agent Tự Sửa Sai (Self-Correcting)**:
-   - Lướt web bằng Playwright, tự động chụp ảnh màn hình và phân tích cây thư mục tương tác DOM.
-   - Chụp ảnh màn hình trực tiếp và stream ảnh Base64 lên Dashboard thời gian thực để người dùng xem AI đang thao tác gì trên web.
-6. **Bộ lọc An toàn & Kiểm duyệt (Human-in-the-loop)**: AI tự phát hiện hành động mang tính rủi ro bảo mật (gửi biểu mẫu, click click nút hành động...) và sẽ dừng lại, kích hoạt màn hình kiểm duyệt để chờ người dùng phê duyệt (Approve) hoặc từ chối kèm chỉ dẫn (Reject) qua Dashboard.
-7. **Vòng lặp Tự học (Self-Learning Loop)**: Lưu trữ kết quả và bài học kinh nghiệm vào **ChromaDB Vector Store** (có cơ chế tự động chuyển sang CSDL JSON File dự phòng siêu bền nếu môi trường Windows bị thiếu thư viện C++).
+Dự án được thiết kế tối ưu để tận dụng tối đa sức mạnh phần cứng GPU (khuyên dùng các dòng card chuyên dụng như **NVIDIA RTX Quadro 6000 24GB VRAM** hoặc tương đương) để chạy cục bộ các mô hình ngôn ngữ lớn (DeepSeek-R1 qua Ollama) và mô hình nhận diện giọng nói tốc độ cao (`faster-whisper` trên nền CUDA).
 
 ---
 
-## 🛠️ Kiến Trúc Hệ Thống
+## ⚡ Các Tính Năng Vượt Trội
+
+1. **Sơ Đồ Workflow Node-Graph Trực Quan**: Cấu hình quy trình xử lý đa bước (Downloader, Audio Enhance, ASR, Translation, TTS, Exporter, SEO, Clipper, Publisher) bằng cách kết nối các node trên giao diện canvas kéo thả mượt mà.
+2. **Bộ Não Trung Tâm DeepSeek-R1**: Hỗ trợ chạy local siêu tốc qua Ollama hoặc kết nối API đám mây, cho phép AI suy nghĩ (Thinking Chain) và lập kế hoạch tối ưu.
+3. **Hiển Thị Luồng Lập Luận (Thinking Chain)**: Tách riêng phần lập luận `<think>` hiển thị thời gian thực lên Dashboard giúp người dùng theo dõi cách AI phân tích yêu cầu.
+4. **Trình Tải Video Cao Cấp**: Tích hợp `yt-dlp` cho phép tải video từ YouTube, Bilibili, TikTok kèm báo cáo tiến trình (tốc độ, dung lượng, % hoàn thành) thời gian thực.
+5. **Động Cơ Subtitle Engine Siêu Tốc (CUDA)**:
+   * Trích xuất giọng nói bằng mô hình `faster-whisper` chạy trực tiếp trên GPU CUDA (dạng `float16` giúp tiết kiệm tài nguyên và tăng tốc gấp 4 lần).
+   * Tự động sửa lỗi hiển thị ký tự đặc biệt của Windows và đường dẫn tương đối khi nhúng phụ đề bằng FFmpeg.
+   * Biên dịch phụ đề ngữ cảnh thông minh và hỗ trợ gộp phụ đề song ngữ (Dual Subtitles).
+6. **Browser Agent Livestream**: Lướt web tự động bằng Playwright, tự sửa sai khi gặp lỗi phần tử DOM, đồng thời chụp ảnh màn hình truyền trực tiếp (Base64 Stream) lên giao diện Dashboard.
+7. **Kiểm Duyệt An Toàn (Human-in-the-loop)**: Tự động dừng lại và hiển thị modal phê duyệt bảo mật khi AI chuẩn bị thực hiện các thao tác nhạy cảm hoặc trước khi xuất bản/đăng tải thành phẩm.
+8. **Vòng Lặp Tự Học (Self-Learning Loop)**: Tích hợp ChromaDB và CSDL tệp tin JSON dự phòng để lưu trữ bài học kinh nghiệm sau mỗi lần chạy, giúp AI ngày càng thông minh hơn.
+
+---
+
+## 📂 Kiến Trúc Hệ Thống
 
 ```
-Duan1/
+AEGIS-AI/
 ├── backend/
 │   ├── main.py                 # Điểm khởi chạy máy chủ FastAPI (REST & WebSockets)
-│   ├── config.py               # Quản lý cấu hình toàn cục (Đường dẫn, Mô hình, Thiết bị CUDA)
+│   ├── config.py               # Quản lý cấu hình toàn cục (Đường dẫn, mô hình, CUDA)
+│   ├── telegram_bot.py         # Bot điều khiển và thông báo qua ứng dụng Telegram
 │   ├── requirements.txt        # Các thư viện Python cần thiết
 │   └── modules/
 │       ├── orchestrator.py     # Bộ điều phối trung tâm, xử lý vòng lặp suy nghĩ và HITL
@@ -42,74 +43,85 @@ Duan1/
 │   ├── index.html              # Giao diện Dashboard (Glassmorphism Dark Mode)
 │   ├── style.css               # Thiết kế giao diện Glassmorphism và hiệu ứng ánh sáng
 │   └── app.js                  # Xử lý luồng WebSocket và cập nhật giao diện trực quan
+├── output/                     # Thư mục lưu trữ video thành phẩm (.mp4, .srt)
 └── README.md                   # Tài liệu hướng dẫn sử dụng (Hiện tại)
 ```
 
 ---
 
-## ⚙️ Hướng Dẫn Cài Đặt & Vận Hành
+## 🛠️ Hướng Dẫn Cài Đặt & Cấu Hình
 
-### Bước 1: Chuẩn bị Môi trường GPU (Khuyên dùng)
-Vì bạn sở hữu card đồ họa **RTX Quadro 6000 (24GB VRAM)**, hãy đảm bảo hệ thống đã cài đặt:
-1. **NVIDIA Driver** phiên bản mới nhất.
-2. **CUDA Toolkit** (Phiên bản khuyến nghị: `11.8` hoặc `12.1`).
-3. **cuDNN** tương ứng với phiên bản CUDA đã cài để tối ưu hóa thư viện `faster-whisper`.
-4. Cài đặt công cụ dòng lệnh **FFmpeg** trên máy của bạn (và thêm vào biến môi trường PATH của hệ thống).
+### Yêu Cầu Hệ Thống
+* **Hệ điều hành**: Windows 10/11 hoặc Linux.
+* **Python**: Phiên bản khuyến nghị `3.10.x`.
+* **Phần cứng (Khuyên dùng cho GPU)**:
+  * NVIDIA GPU hỗ trợ CUDA (Khuyên dùng >= 8GB VRAM, tối ưu trên dòng 24GB VRAM).
+  * Đã cài đặt **CUDA Toolkit** (ví dụ `11.8` hoặc `12.1`) và thư viện **cuDNN** tương ứng.
+* **Công cụ**: **FFmpeg** đã được cài đặt và thêm vào biến môi trường `PATH` của hệ thống.
 
-### Bước 2: Cài đặt các thư viện Python
-Mở Command Prompt / PowerShell tại thư mục `backend/` và thực hiện lệnh cài đặt:
-
+### Bước 1: Clone dự án và truy cập thư mục
 ```bash
-cd backend
-pip install -r requirements.txt
+git clone https://github.com/usagiloves/AEGIS-AI.git
+cd AEGIS-AI
 ```
 
-Sau đó, cài đặt trình duyệt tự động của Playwright:
+### Bước 2: Cài đặt các thư viện Python
+Nên tạo một môi trường ảo để cài đặt sạch sẽ các thư viện:
+```bash
+# Tạo môi trường ảo (tùy chọn)
+python -m venv venv
+venv\Scripts\activate
+
+# Cài đặt các thư viện yêu cầu
+pip install -r backend/requirements.txt
+```
+
+Cài đặt các trình duyệt cần thiết cho Playwright:
 ```bash
 python -m playwright install chromium
 ```
 
-### Bước 3: Cấu hình Mô hình & Kết nối (Tùy chọn)
-Tạo file `.env` bên trong thư mục `backend/` nếu bạn muốn tùy biến:
-```env
-# Nếu sử dụng API đám mây chính thức của DeepSeek:
-DEEPSEEK_API_KEY=your_api_key_here
-USE_OLLAMA=false
+### Bước 3: Cấu hình biến môi trường
+Tạo tệp `.env` bên trong thư mục `backend/` để cấu hình mô hình AI:
 
-# Nếu sử dụng local Ollama (Mặc định được khuyến nghị nhờ có GPU Quadro 24GB VRAM):
+```env
+# Nếu sử dụng Ollama cục bộ (Khuyên dùng với GPU cấu hình cao):
 USE_OLLAMA=true
 OLLAMA_HOST=http://localhost:11434
-OLLAMA_MODEL=deepseek-r1:8b  # Hoặc deepseek-r1:14b / 32b tùy nhu cầu
+OLLAMA_MODEL=deepseek-r1:8b  # Có thể đổi thành deepseek-r1:14b / 32b nếu VRAM cho phép
 
-# Cấu hình phụ đề (GPU CUDA float16 được đặt làm mặc định trong config.py)
+# Nếu sử dụng API đám mây chính thức của DeepSeek:
+# USE_OLLAMA=false
+# DEEPSEEK_API_KEY=your_api_key_here
+
+# Cấu hình Whisper trích xuất phụ đề
 WHISPER_MODEL_SIZE=large-v3
 WHISPER_DEVICE=cuda
 WHISPER_COMPUTE_TYPE=float16
 ```
 
-> [!TIP]
-> Với 24GB VRAM, bạn hoàn toàn có thể chạy mô hình **`deepseek-r1:14b`** hoặc **`deepseek-r1:32b`** trên Ollama cục bộ siêu mượt và chính xác!
+---
 
-### Bước 4: Khởi chạy Máy chủ Backend
-Tại thư mục `backend/`, khởi chạy server:
+## 🚀 Hướng Dẫn Khởi Chạy
+
+### 1. Khởi chạy máy chủ Backend
+Di chuyển vào thư mục `backend/` và chạy lệnh:
 ```bash
+cd backend
 python main.py
 ```
-Máy chủ FastAPI sẽ hoạt động tại địa chỉ: `http://127.0.0.1:8000` và mở cổng kết nối WebSocket thời gian thực tại `ws://127.0.0.1:8000/ws`.
+Máy chủ FastAPI sẽ khởi chạy trên cổng **`8000`**. Telegram Bot đi kèm cũng sẽ bắt đầu hoạt động ngầm (nếu được cấu hình token).
 
-### Bước 5: Mở Giao diện Dashboard (Frontend)
-Vì giao diện được xây dựng theo kiến trúc **Single Page App (SPA)** tối giản và hiện đại sử dụng HTML/CSS/JS thuần túy, bạn chỉ cần:
-1. Click đúp chuột vào file `frontend/index.html` để mở giao diện trực tiếp trên trình duyệt Web (Chrome, Edge, Brave...).
-2. Hoặc bạn có thể sử dụng một live-server extension bất kỳ trong IDE (như VS Code Live Server).
+### 2. Truy cập giao diện điều khiển (Frontend)
+Hệ thống sử dụng kiến trúc SPA và được mount trực tiếp qua server backend. Bạn chỉ cần truy cập:
+👉 **[http://127.0.0.1:8000/app/index.html](http://127.0.0.1:8000/app/index.html)** (hoặc link ngắn **[http://127.0.0.1:8000/](http://127.0.0.1:8000/)**) trên bất kỳ trình duyệt nào.
 
 ---
 
-## 🔮 Hướng Dẫn Trải Nghiệm Hệ Thống
+## 💡 Hướng Dẫn Trải Nghiệm Quy Trình
 
-1. **Nhập Mục Tiêu**: Nhập yêu cầu của bạn trên Dashboard (ví dụ: *"Tải một video ngắn về AI từ Youtube, dịch phụ đề sang tiếng Việt và lưu lại"*).
-2. **Quan Sát**:
-   - Tab **LOG HỆ THỐNG** sẽ hiển thị tiến trình chạy thực tế của các module.
-   - Tab **BỘ NÃO SUY NGHĨ** hiển thị từng bước lập luận sâu sắc của DeepSeek.
-   - **Task Roadmap** sẽ cập nhật tiến độ, tô màu xanh lá sáng bừng cho các bước hoàn thành.
-3. **Màn Hình Livestream**: Khi AI lướt web, bạn sẽ thấy screenshot màn hình trình duyệt nhảy theo từng giây. Khi AI nhúng phụ đề video thành công, một trình phát video sẽ hiện ra ngay lập tức cho phép bạn xem và nghe trực tiếp.
-4. **Kiểm duyệt (Human-in-the-loop)**: Thử lập kế hoạch cho một bước duyệt web nhạy cảm, giao diện sẽ tự động hiện modal cảnh báo bảo mật. Bạn có thể nhấn **Approve** để AI tiếp tục hoặc **Reject** kèm bình luận để AI đổi hướng làm việc!
+1. **Nhập Mục Tiêu Lớn**: Tại ô nhập mục tiêu ở Header, điền yêu cầu vận hành (Ví dụ: *"Tải video ngắn từ youtube https://www.youtube.com/watch?v=xxxx, dịch sang tiếng Việt và nhúng phụ đề song ngữ"*).
+2. **Thiết Lập Sơ Đồ Node**: Bật/Tắt các Node chức năng (như `Downloader`, `Translator`, `Exporter`, `SEO`, `Clipper`, `Uploader`) bằng cách bấm nút `✕`/`👁️` trên góc mỗi Node. Bấm trực tiếp vào từng Node để cấu hình tham số nâng cao.
+3. **Bấm Bắt Đầu Vận Hành**: Hệ thống sẽ chuyển trạng thái sang lập kế hoạch, hiển thị luồng suy nghĩ của DeepSeek trên bảng điều khiển bên trái và chạy tuần tự các Node trên canvas đồ họa.
+4. **Phê Duyệt HITL**: Khi quy trình chạy tới bước đăng tải hoặc thao tác trình duyệt nhạy cảm, giao diện sẽ xuất hiện Modal Kiểm Duyệt. Bạn có thể xem trước nội dung, chỉnh sửa tiêu đề và mô tả SEO do AI tạo ra, sau đó nhấn **Approve** (Đồng ý) hoặc **Reject** (Từ chối kèm chỉ dẫn sửa lại).
+5. **Thành Phẩm**: Video đầu ra được lưu trữ tại `output/`. Bạn có thể nhấp trực tiếp vào danh sách video ở mục **Thư Viện Thành Phẩm** để xem trực tiếp hoặc tải xuống.
