@@ -7,36 +7,37 @@ Dự án được thiết kế tối ưu để tận dụng tối đa sức mạ
 
 ---
 
-## 🗺️ Sơ Đồ Hệ Thống (System Mind Map)
+## 🔄 Sơ Đồ Luồng Hoạt Động Hệ Thống (System Workflow Diagram)
 
 ```mermaid
-graph TD
-    User([Người dùng / Web UI]) <-->|WebSocket & REST API| FastAPI[FastAPI Server backend/main.py]
-    FastAPI <-->|Điều phối luồng| Orchestrator[Orchestrator modules/orchestrator.py]
+flowchart TD
+    Start([1. Nhập Mục Tiêu từ Web UI]) --> Plan[2. DeepSeek-R1 phân tích & Lập Kế Hoạch]
+    Plan --> SyncUI[3. Đồng bộ danh sách bước lên Node-Graph]
+    SyncUI --> LoopStart{4. Duyệt qua từng bước trong Kế Hoạch}
     
-    subgraph "Bộ Não & Bộ Nhớ Học Tập"
-        Orchestrator <-->|Lập kế hoạch & Lập luận| DeepSeek[DeepSeek-R1 Local/Cloud]
-        Orchestrator <-->|Vòng lặp tự học| Learning[(Memory Store ChromaDB / JSON)]
-    end
+    LoopStart -->|Bước tiếp theo| RunStep[5. Kích hoạt Node tương ứng chạy ngầm]
+    RunStep --> CheckHITL{6. Yêu cầu kiểm duyệt HITL?}
     
-    subgraph "Pipeline Thực Thi Đa Bước (Workflow)"
-        Orchestrator -->|1. Tải Video| Downloader[Video Downloader yt-dlp]
-        Orchestrator -->|2. Tách âm thanh| AudioEnhance[Audio Extract & Enhance]
-        Orchestrator -->|3. Nhận dạng giọng| ASR[Subtitle ASR faster-whisper CUDA]
-        Orchestrator -->|4. Dịch thuật AI| Translator[LLM Translator DeepSeek]
-        Orchestrator -->|5. Lồng tiếng AI| TTS[Voiceover TTS Edge/OpenAI]
-        Orchestrator -->|6. Nhúng phụ đề| Exporter[Exporter Burn ASS FFmpeg]
-        Orchestrator -->|7. Cắt Shorts| Clipper[Shorts Clipper FFmpeg]
-        Orchestrator -->|8. Sinh bài tiếp thị| SEO[SEO & Marketing Post]
-        Orchestrator -->|9. Đăng tải tự động| Publisher[Cloud Publisher Drive/Telegram/YouTube]
-    end
-
-    subgraph "Thành Phần & Công Cụ Ngoại Vi"
-        DeepSeek <-->|Quản lý & Chạy Local| Ollama[Ollama Server]
-        ASR <-->|Tăng tốc xử lý GPU| CUDA[NVIDIA CUDA Toolkit + cuDNN]
-        Exporter & Clipper & AudioEnhance <-->|Mã hóa đa phương tiện| FFmpeg[FFmpeg CLI]
-        Publisher <-->|Ủy quyền dịch vụ đám mây| Credentials[Google Client Secrets + Telegram Bot Token]
-    end
+    CheckHITL -->|Có| WaitApprove[7. Dừng tiến trình, hiển thị màn hình duyệt]
+    WaitApprove --> UserAction{8. Phản hồi của người dùng}
+    
+    UserAction -->|Từ chối / Sửa| Reject[9. Gửi feedback để đổi hướng / sửa thông tin]
+    Reject --> LoopStart
+    
+    UserAction -->|Phê duyệt| Approve[10. Cập nhật tham số & Tiếp tục chạy]
+    Approve --> RunLogic[11. Thực thi logic xử lý đa phương tiện]
+    
+    CheckHITL -->|Không| RunLogic
+    
+    RunLogic --> CheckSuccess{12. Chạy thành công?}
+    CheckSuccess -->|Có| MarkSuccess[13. Đánh dấu Node xanh lá trên giao diện]
+    MarkSuccess --> LoopStart
+    
+    CheckSuccess -->|Không| MarkFailed[14. Đánh dấu Node đỏ & Ghi log lỗi]
+    MarkFailed --> EndFailed([Kết thúc lỗi])
+    
+    LoopStart -->|Hoàn thành tất cả các bước| PostProcess[15. Đăng tải đám mây & Lưu kinh nghiệm học tập]
+    PostProcess --> EndSuccess([Kết thúc thành công])
 ```
 
 ---
@@ -95,7 +96,7 @@ FFmpeg là công cụ dòng lệnh xử lý video và âm thanh (cắt ghép, tr
   3. Thêm thư mục `C:\ffmpeg\bin` vào biến môi trường **Environment Variables -> PATH** của Windows.
   4. Mở Command Prompt và kiểm tra lại bằng lệnh: `ffmpeg -version`.
 
-### 2. Cấu Hình GPU NVIDIA CUDA & cuDNN (Khuyên dùng)
+### 2. Cấu Hùi GPU NVIDIA CUDA & cuDNN (Khuyên dùng)
 Dành cho tính năng trích xuất phụ đề siêu tốc của `faster-whisper` trên GPU.
 1. **CUDA Toolkit**: 
    * Tải và cài đặt [CUDA Toolkit 11.8 hoặc 12.1](https://developer.nvidia.com/cuda-downloads) phù hợp với Driver của card đồ họa.
