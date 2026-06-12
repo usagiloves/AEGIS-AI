@@ -1,0 +1,5 @@
+--- YOUTUBE UPLOAD TEST LOG ---
+Imported upload_to_youtube successfully.
+Testing upload of video file: f:\Duan1\output\老师说高考要放平心态！_subbed.mp4
+[Callback] {'status': 'info', 'message': '🚀 Bắt đầu quy trình kết nối YouTube Data API v3...'}
+[Callback] {'status': 'info', 'message': '🔑 Đang khởi tạo luồng xác thực OAuth2 mới. Vui lòng phê duyệt trên cửa sổ trình duyệt...'}

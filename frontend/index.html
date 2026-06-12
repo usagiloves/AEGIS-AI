@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aegis AI Employee - Control Center</title>
+    <!-- Google Fonts: Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=3.6">
+</head>
+<body>
+    <!-- Nền lưới động tương lai -->
+    <div class="space-background">
+        <div class="grid-overlay"></div>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- 1. Header -->
+        <header class="app-header">
+            <div class="logo-area">
+                <span class="logo-icon">✦</span>
+                <div class="logo-text">
+                    <h1>AEGIS AI EMPLOYEE</h1>
+                    <span class="subtitle">Trung Tâm Điều Hành Tác Nhân Tự Động</span>
+                </div>
+            </div>
+            
+            <div class="system-status-panel">
+                <!-- Vòng tròn giám sát tài nguyên CPU, RAM, GPU -->
+                <div class="metrics-container">
+                    <div class="metric-circle-item">
+                        <span class="metric-circle-label">CPU</span>
+                        <div class="circle-chart">
+                            <svg viewBox="0 0 36 36" class="circular-chart neon-blue-chart">
+                                <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                <path class="circle" id="cpu-circle" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            </svg>
+                            <span class="circle-percentage" id="cpu-val-text">0%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-circle-item">
+                        <span class="metric-circle-label">RAM</span>
+                        <div class="circle-chart">
+                            <svg viewBox="0 0 36 36" class="circular-chart neon-violet-chart">
+                                <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                <path class="circle" id="ram-circle" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            </svg>
+                            <span class="circle-percentage" id="ram-val-text">0%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-circle-item" title="NVIDIA GPU utilization hoặc VRAM load">
+                        <span class="metric-circle-label">GPU</span>
+                        <div class="circle-chart">
+                            <svg viewBox="0 0 36 36" class="circular-chart neon-green-chart">
+                                <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                <path class="circle" id="gpu-circle-chart" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            </svg>
+                            <span class="circle-percentage" id="gpu-val-text">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hardware-info">
+                    <span class="chip-icon">⚡</span>
+                    <span class="hardware-text" id="gpu-name-text">RTX Quadro 6000 (24GB VRAM)</span>
+                </div>
+                <div class="status-indicator" id="agent-status-badge">
+                    <span class="status-pulse"></span>
+                    <span class="status-label" id="agent-status-text">ĐANG CHỜ</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- 2. Main Grid -->
+        <main class="dashboard-grid">
+            <!-- Cột trái: Điều khiển & Kế hoạch -->
+            <section class="col-left">
+                <!-- Thư viện Thành phẩm Media Library -->
+                <div class="dashboard-card glass-panel media-library-panel">
+                    <h2 class="card-title"><span class="icon">🎬</span> Thư Viện Thành Phẩm (Media Library)</h2>
+                    <p class="card-desc">Danh sách video đã burn phụ đề trong thư mục output. Nhấn vào video để tải về hoặc phát trực tiếp.</p>
+                    <div class="media-library-list" id="media-library-list" style="display: flex; flex-direction: column; gap: 10px; max-height: 200px; overflow-y: auto; margin-top: 12px;">
+                        <div class="empty-state">Không có tệp thành phẩm nào. Hãy chạy AI để tạo video đầu tiên!</div>
+                    </div>
+                </div>
+
+                <!-- Bảng Suy nghĩ & Log hệ thống -->
+                <div class="dashboard-card glass-panel logs-panel">
+                    <div class="log-tabs">
+                        <button class="log-tab active" data-tab="terminal">LOG HỆ THỐNG</button>
+                        <button class="log-tab" data-tab="thinking">BỘ NÃO SUY NGHĨ (DEEPSEEK R1)</button>
+                        <button class="log-tab" data-tab="seo">TÓM TẮT SEO & CHƯƠNG MỤC</button>
+                    </div>
+                    
+                    <div class="log-contents">
+                        <!-- Terminal Log -->
+                        <div class="log-content-panel active" id="terminal-log">
+                            <div class="terminal-header">
+                                <span>SYSTEM CONSOLE v1.0.0</span>
+                                <span class="blink">●</span>
+                            </div>
+                            <div class="terminal-body" id="terminal-body">
+                                <div class="log-line info">> Chào mừng bạn đến với Aegis AI Employee System. Sẵn sàng nhận lệnh...</div>
+                            </div>
+                        </div>
+                        
+                        <!-- AI Thinking Log -->
+                        <div class="log-content-panel" id="thinking-log">
+                            <div class="thinking-header">
+                                <span>Luồng lập luận và suy nghĩ sâu (Thinking chain)...</span>
+                            </div>
+                            <div class="thinking-body" id="thinking-body">
+                                Đang chờ AI lập luận...
+                            </div>
+                        </div>
+                        
+                        <!-- AI SEO & Chapters Panel -->
+                        <div class="log-content-panel" id="seo-log">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <div class="thinking-header" style="margin: 0; color: var(--neon-blue);">
+                                    <span>Nội dung Marketing SEO & Chapters tạo bởi AI</span>
+                                </div>
+                                <button id="copy-seo-btn" class="btn btn-primary" style="padding: 6px 14px; font-size: 11px; border-radius: 6px; border: none; font-weight: 700;">
+                                    SAO CHÉP NHANH
+                                </button>
+                            </div>
+                            <div class="thinking-body" id="seo-body" style="background: rgba(2, 132, 199, 0.04); border-color: rgba(2, 132, 199, 0.12); color: var(--text-primary); font-family: var(--font-sans); font-size: 13px; line-height: 1.6; white-space: pre-wrap; height: 320px;">
+                                Đang chờ video hoàn thành để sinh nội dung SEO...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- Cột phải: Live Workflow Node-Graph (Tâm điểm chính của màn hình) -->
+            <section class="col-right">
+                <!-- Bảng Điều Khiển Sơ Đồ Node-Graph Tương Tác (Aegis Workflow) -->
+                <div class="dashboard-card glass-panel workflow-panel">
+                    <div class="workflow-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <div>
+                            <h2 class="card-title" style="margin-bottom: 2px;"><span class="icon">🕸️</span> Sơ Đồ Workflow Node-Graph</h2>
+                            <p class="card-desc" style="margin-bottom: 0;">Cấu hình trực quan và kết nối các khối chức năng để thiết lập chuỗi xử lý tự động hóa toàn diện.</p>
+                        </div>
+                        <div class="workflow-actions" style="display: flex; gap: 8px;">
+                            <button id="reset-layout-btn" class="btn" style="padding: 6px 12px; font-size: 11px; border-radius: 8px; border: 1px solid var(--border-light); font-weight: 600; cursor: pointer;" title="Sắp xếp lại sơ đồ">
+                                🔄 Sắp xếp
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Thanh nhập mục tiêu (Goal Tools) -->
+                    <div class="workflow-tools" style="display: flex; flex-direction: column; gap: 8px; background: rgba(255, 255, 255, 0.4); padding: 12px; border-radius: 12px; border: 1px solid var(--border-light); margin-bottom: 12px;">
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <textarea id="goal-input" style="flex-grow: 1; height: 42px; min-height: 42px; max-height: 42px; border-radius: 8px; font-size: 13px; padding: 10px; border: 1px solid var(--border-light); resize: none;" placeholder="Nhập mục tiêu (ví dụ: tải video và tạo phụ đề song ngữ)..."></textarea>
+                            
+                            <button id="launch-btn" class="btn btn-primary neon-pulse" style="height: 42px; padding: 0 20px; font-size: 12px; font-weight: 700; border-radius: 8px; white-space: nowrap;">
+                                BẮT ĐẦU VẬN HÀNH
+                            </button>
+                        </div>
+                        
+                        <!-- Lựa chọn Đăng tải tự động -->
+                        <div class="uploader-options" style="display: flex; gap: 16px; padding: 0 4px;">
+                            <label style="display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: var(--text-secondary); cursor: pointer;">
+                                <input type="checkbox" id="sync-gdrive" style="width: auto; height: auto; margin: 0; cursor: pointer;">
+                                Sao lưu Google Drive
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: var(--text-secondary); cursor: pointer;">
+                                <input type="checkbox" id="sync-telegram" style="width: auto; height: auto; margin: 0; cursor: pointer;">
+                                Gửi Telegram Bot
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: var(--text-secondary); cursor: pointer;">
+                                <input type="checkbox" id="sync-youtube" style="width: auto; height: auto; margin: 0; cursor: pointer;">
+                                Đăng tải YouTube 🎥
+                            </label>
+                            <span style="font-size: 11px; font-weight: 700; color: var(--neon-cyan); margin-left: auto;">
+                                💡 Nhấp vào từng Node bên dưới để Cấu hình nhanh!
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Downloader Progress Bar tích hợp gọn gàng -->
+                    <div class="downloader-progress-bar hidden" id="downloader-progress-container" style="background: rgba(255, 255, 255, 0.55); border: 1px solid var(--border-light); border-radius: 12px; padding: 10px 14px; display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px;">
+                        <div class="dl-info" style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: var(--text-primary);">
+                            <span id="dl-filename">video.mp4</span>
+                            <span id="dl-percentage">0%</span>
+                        </div>
+                        <div class="dl-track" style="width: 100%; height: 5px; background: rgba(14, 165, 233, 0.08); border-radius: 3px; overflow: hidden;">
+                            <div class="dl-fill" id="dl-fill-bar" style="width: 0%; height: 100%; background: var(--grad-primary); box-shadow: 0 0 6px var(--neon-blue); border-radius: 3px; transition: width 0.3s ease;"></div>
+                        </div>
+                        <div class="dl-details" style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted);">
+                            <span id="dl-speed">0 MB/s</span>
+                            <span id="dl-eta">ETA: 0s</span>
+                        </div>
+                    </div>
+
+                    <!-- Workspace Wrapper: bọc Thư viện Node và Canvas -->
+                    <div class="workflow-workspace-wrapper" style="display: flex; gap: 16px; flex-grow: 1; min-height: 0; width: 100%;">
+                        <!-- Thư viện Node (Node Library Panel) kéo thả -->
+                        <div class="node-library-panel" id="node-library-panel">
+                            <div class="library-header">Thư Viện Node</div>
+                            <div class="library-desc">Kéo và thả các khối vào canvas để kích hoạt:</div>
+                            <div class="library-node-list">
+                                <div class="library-node-item" draggable="true" data-node-id="downloader">
+                                    <span class="lib-node-icon">📥</span>
+                                    <div class="lib-node-meta">
+                                        <div class="lib-node-name">Downloader</div>
+                                        <div class="lib-node-desc">Tải video từ URL</div>
+                                    </div>
+                                </div>
+                                <div class="library-node-item" draggable="true" data-node-id="audio">
+                                    <span class="lib-node-icon">🔊</span>
+                                    <div class="lib-node-meta">
+                                        <div class="lib-node-name">Audio Extract</div>
+                                        <div class="lib-node-desc">Tách AI enhanced</div>
+                                    </div>
+                                </div>
+                                <div class="library-node-item" draggable="true" data-node-id="subtitle">
+                                    <span class="lib-node-icon">🎙️</span>
+                                    <div class="lib-node-meta">
+                                        <div class="lib-node-name">Subtitle ASR</div>
+                                        <div class="lib-node-desc">Nhận diện giọng</div>
+                                    </div>
+                                </div>
+                                <div class="library-node-item" draggable="true" data-node-id="translator">
+                                    <span class="lib-node-icon">🌐</span>
+                                    <div class="lib-node-meta">
+                                        <div class="lib-node-name">Translator</div>
+                                        <div class="lib-node-desc">Dịch thuật AI</div>
+                                    </div>
+                                </div>
+                                <div class="library-node-item" draggable="true" data-node-id="exporter">
+                                    <span class="lib-node-icon">🎬</span>
+                                    <div class="lib-node-meta">
+                                        <div class="lib-node-name">Exporter Burn</div>
+                                        <div class="lib-node-desc">Nhúng phụ đề ASS</div>
+                                    </div>
+                                </div>
+                                <div class="library-node-item" draggable="true" data-node-id="voiceover">
+                                    <span class="lib-node-icon">🗣️</span>
+                                    <div class="lib-node-meta">
+                                        <div class="lib-node-name">Voiceover TTS</div>
+                                        <div class="lib-node-desc">Lồng tiếng AI</div>
+                                    </div>
+                                </div>
+                                <div class="library-node-item" draggable="true" data-node-id="seo">
+                                    <span class="lib-node-icon">📝</span>
+                                    <div class="lib-node-meta">
+                                        <div class="lib-node-name">SEO Node</div>
+                                        <div class="lib-node-desc">AI SEO & Social</div>
+                                    </div>
+                                </div>
+                                <div class="library-node-item" draggable="true" data-node-id="clipper">
+                                    <span class="lib-node-icon">✂️</span>
+                                    <div class="lib-node-meta">
+                                        <div class="lib-node-name">Clipper Node</div>
+                                        <div class="lib-node-desc">Cắt Shorts 9:16</div>
+                                    </div>
+                                </div>
+                                <div class="library-node-item" draggable="true" data-node-id="uploader">
+                                    <span class="lib-node-icon">📤</span>
+                                    <div class="lib-node-meta">
+                                        <div class="lib-node-name">Cloud Publisher</div>
+                                        <div class="lib-node-desc">Đăng tải tự động</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Không gian Canvas Node-Graph (Interactive Grid) -->
+                        <div class="workflow-canvas-container" id="workflow-canvas-container" style="flex-grow: 1; position: relative; border-radius: 12px; border: 1px solid var(--border-light); overflow: auto; background-color: rgba(248, 250, 252, 0.45); user-select: none; cursor: grab;">
+                            <!-- Inner canvas: đủ rộng để chứa toàn bộ 9 node, cuộn ngang khi không đủ chỗ -->
+                            <div id="workflow-inner-canvas" style="position: relative; min-width: 1600px; min-height: 600px; width: 1600px; height: 600px;">
+                                <!-- Nền lưới Grid -->
+                                <div class="workflow-grid-bg" style="position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(rgba(14, 165, 233, 0.08) 1.2px, transparent 1.2px); background-size: 20px 20px;"></div>
+                                
+                                <!-- SVG lớn để vẽ các đường Bezier kết nối các Node -->
+                                <svg id="workflow-svg" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; overflow: visible; z-index: 1;">
+                                    <defs>
+                                        <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                                            <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#0ea5e9" flood-opacity="0.6"/>
+                                        </filter>
+                                        <filter id="glow-violet" x="-20%" y="-20%" width="140%" height="140%">
+                                            <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#7c3aed" flood-opacity="0.6"/>
+                                        </filter>
+                                        <filter id="glow-green" x="-20%" y="-20%" width="140%" height="140%">
+                                            <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#10b981" flood-opacity="0.6"/>
+                                        </filter>
+                                    </defs>
+                                </svg>
+
+                                <!-- Khung chứa các HTML Nodes được kéo thả -->
+                                <div id="workflow-nodes" style="position: absolute; inset: 0; pointer-events: auto; z-index: 2;">
+                                    <!-- Nodes sẽ được render động thông qua Javascript -->
+                                </div>
+                            </div>
+                            
+                            <!-- Thanh chỉ dẫn cuộn ngang khi canvas rộng hơn khung nhìn -->
+                            <div id="canvas-scroll-hint" style="display: none; position: absolute; bottom: 10px; right: 16px; background: rgba(14, 165, 233, 0.12); border: 1px solid rgba(14,165,233,0.2); border-radius: 20px; padding: 4px 12px; font-size: 10px; font-weight: 700; color: var(--neon-blue); pointer-events: none; backdrop-filter: blur(6px); gap: 4px; align-items: center;">
+                                ← Cuộn ngang để xem thêm →
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 3. Human-in-the-loop Security Approval Modal -->
+    <div class="modal-overlay hidden" id="approval-modal">
+        <div class="modal-card glass-panel" style="max-width: 600px; width: 90%; display: flex; flex-direction: column; gap: 16px;">
+            <div class="modal-header" style="display: flex; align-items: center; gap: 12px;">
+                <span class="warning-shield">🛡️</span>
+                <h3 style="margin: 0; font-size: 18px;">Yêu Cầu Kiểm Duyệt Bảo Mật (Human-in-the-loop)</h3>
+            </div>
+            <div class="modal-body" style="display: flex; flex-direction: column; gap: 12px;">
+                <p class="modal-subtitle" style="margin: 0;">AI Employee chuẩn bị thực hiện một hành động quan trọng và cần sự phê duyệt của bạn:</p>
+                <div class="approval-details-box" style="margin: 0;">
+                    <h4 id="approval-step-title" style="margin-bottom: 4px;">Bước 3: Gửi bình luận lên diễn đàn</h4>
+                    <p id="approval-step-desc" style="margin: 0;">AI muốn thực hiện: [browser] click vào nút Đăng bài...</p>
+                </div>
+
+                <!-- Chỗ để hiện ảnh chụp màn hình Browser trong Modal Phê duyệt -->
+                <div class="modal-browser-screenshot-container hidden" id="modal-browser-container" style="width: 100%; border: 1px solid var(--border-light); border-radius: 8px; overflow: hidden; margin: 4px 0; background: #000;">
+                    <div style="background: rgba(255, 255, 255, 0.9); padding: 6px 12px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-light); font-weight: 700;">
+                        <span style="color: var(--text-secondary);">📸 Ảnh chụp màn hình trình duyệt trực tiếp:</span>
+                        <span id="modal-browser-step-badge" class="browser-step-badge" style="background: var(--grad-violet); font-size: 9px; padding: 2px 6px; border-radius: 4px; font-weight: 700; color: #ffffff;">Step</span>
+                    </div>
+                    <img src="" id="modal-browser-screenshot" style="width: 100%; display: block; object-fit: contain; max-height: 250px;" alt="Browser Stream">
+                </div>
+
+                <!-- Phần chỉnh sửa SEO & Tiêu đề khi Review (HITL) -->
+                <div class="seo-review-box hidden" id="seo-review-box" style="display: flex; flex-direction: column; gap: 10px; border: 1px solid var(--border-light); border-radius: 8px; padding: 12px; background: rgba(255, 255, 255, 0.05); margin-bottom: 8px;">
+                    <h4 style="margin: 0; font-size: 13px; color: var(--neon-cyan); text-transform: uppercase; font-weight: 700;">📝 Xem Trước & Chỉnh Sửa SEO & Tiêu Đề</h4>
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <label for="seo-review-title" style="font-size: 11px; font-weight: 700; color: var(--text-secondary);">Tiêu đề Video YouTube (Tối đa 100 ký tự):</label>
+                        <input type="text" id="seo-review-title" style="width: 100%; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--border-light); color: var(--text-primary); padding: 8px; border-radius: 6px; font-size: 13px;" placeholder="Nhập tiêu đề video...">
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <label for="seo-review-desc" style="font-size: 11px; font-weight: 700; color: var(--text-secondary);">Nội dung Mô tả SEO, Chapters & Hashtags:</label>
+                        <textarea id="seo-review-desc" style="height: 150px; font-family: monospace; font-size: 12px; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--border-light); color: var(--text-primary); padding: 8px; border-radius: 6px; resize: vertical;" placeholder="Nhập mô tả SEO..."></textarea>
+                    </div>
+                </div>
+
+                <div class="feedback-input" style="display: flex; flex-direction: column; gap: 6px;">
+                    <label for="reject-comment" style="font-size: 12px; font-weight: 700;">Nhập phản hồi/chỉ dẫn bổ sung (nếu bạn Từ chối):</label>
+                    <textarea id="reject-comment" style="height: 60px;" placeholder="Ví dụ: Thay đổi nút bấm sang ô bên cạnh / Đừng đăng nội dung này, hãy tìm chủ đề khác..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin: 0; display: flex; justify-content: flex-end; gap: 12px;">
+                <button id="modal-reject-btn" class="btn btn-danger">TỪ CHỐI (REJECT)</button>
+                <button id="modal-approve-btn" class="btn btn-success neon-pulse">PHÊ DUYỆT (APPROVE)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Panel Cấu Hình Node Động Trượt Ra (Node Config Sidebar) -->
+    <div class="node-config-sidebar hidden" id="node-config-sidebar">
+        <div class="sidebar-header">
+            <span class="sidebar-icon" id="sidebar-node-icon">⚙️</span>
+            <h3 id="sidebar-node-title">Cấu hình Node</h3>
+            <button class="sidebar-close-btn" id="sidebar-close-btn">&times;</button>
+        </div>
+        <div class="sidebar-body" id="sidebar-config-fields">
+            <!-- Các trường cấu hình sẽ được render động theo loại Node -->
+        </div>
+    </div>
+
+    <!-- 5. Trình Biên Tập Phụ Đề Tương Tác Modal Overlay -->
+    <div class="modal-overlay hidden" id="subtitle-editor-modal" style="z-index: 101;">
+        <div class="modal-card glass-panel" style="max-width: 900px; width: 90%; height: 85%; max-height: 750px; display: flex; flex-direction: column; padding: 24px; gap: 16px;">
+            <div class="modal-header" style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-light); padding-bottom: 12px; margin-bottom: 4px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 24px;">📝</span>
+                    <h3 style="font-size: 18px; font-weight: 800; color: var(--text-primary); margin: 0;">Trình Biên Tập Phụ Đề Tương Tác (Human-in-the-loop)</h3>
+                </div>
+                <span class="editor-badge font-mono" style="background: var(--grad-primary); color: #ffffff; font-size: 9px; padding: 3px 8px; border-radius: 4px; font-weight: 700; letter-spacing: 0.5px;">EDIT MODE</span>
+            </div>
+            
+            <div class="editor-body" id="subtitle-editor-list" style="flex-grow: 1; overflow-y: auto; padding-right: 6px; display: flex; flex-direction: column; gap: 10px;">
+                <!-- Các dòng phụ đề sẽ được nạp động vào đây -->
+            </div>
+            
+            <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 16px; border-top: 1px solid var(--border-light); padding-top: 16px; margin-top: 4px;">
+                <button id="editor-cancel-btn" class="btn" style="background: rgba(225, 29, 72, 0.1); color: var(--neon-red); padding: 10px 24px; font-size: 13px; font-weight: 700; border-radius: 8px;">HỦY BỎ</button>
+                <button id="editor-save-btn" class="btn btn-success neon-pulse" style="padding: 10px 24px; font-size: 13px;">
+                    XÁC NHẬN & NHÚNG PHỤ ĐỀ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. Trình Phát Video Lightbox Modal Overlay -->
+    <div class="modal-overlay hidden" id="video-player-modal" style="z-index: 102;">
+        <div class="modal-card glass-panel" style="max-width: 960px; width: 90%; aspect-ratio: 16/9; padding: 0; overflow: hidden; position: relative; border-radius: 16px; background: #000000; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+            <button id="close-video-btn" style="position: absolute; top: 16px; right: 16px; font-size: 24px; background: rgba(0, 0, 0, 0.6); color: #ffffff; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; transition: var(--transition-smooth); line-height: 1;">&times;</button>
+            <video id="video-player" controls style="width: 100%; height: 100%; object-fit: contain;"></video>
+        </div>
+    </div>
+
+    <script src="app.js?v=3.6"></script>
+</body>
+</html>
